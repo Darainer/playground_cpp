@@ -9,8 +9,7 @@
 
 using namespace Object_types;
 
-int objectCount{ 0 };
-
+int Object::objectCount{0}; // initialize to zero on program startup
 
 int  d{0};
 
@@ -28,7 +27,7 @@ Object return_object(){
     Object obj2 = fixture();
     std::cout << Object::getCount()<< std::endl;
     return obj2;
-}
+}   //myobj goes out of scope when return_object() returns obj2, calls destructor
 
 
 int main(){
@@ -39,7 +38,7 @@ int main(){
 
     Object ret_obj = return_object();
     std::cout << Object::getCount()<< std::endl;
-    Objectvec.push_back(ret_obj);
+    Objectvec.emplace_back(ret_obj);
     std::cout << Object::getCount()<< std::endl;
     Object test = fixture();
     std::cout << Object::getCount() << std::endl;
@@ -48,9 +47,5 @@ int main(){
     Object test3 = fixture();
 
     std::cout << Object::getCount() << std::endl;   // static variable can be accessed from any object,
-
-    int x = 42;
-    int y = x;
-    y *= 2;
 }
 
