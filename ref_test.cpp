@@ -5,15 +5,10 @@
 #include <iostream>
 #include <string>
 
-void print(const std::string& msg){
-    std::cout << msg << '\n';
-}
+void print(const std::string &msg) { std::cout << msg << '\n'; }
 
-void add_quotes(std::string& s){
-    s = "'" + s + "'";
+void add_quotes(std::string &s) { s = "'" + s + "'"; }
 
-}
-
-int main(int arg_n, ){
+int main(int arg_n, char **){
 
 };
