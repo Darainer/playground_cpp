@@ -1,6 +1,7 @@
 //
 // Created by ryan on 07.03.20.
 //
+#include <algorithm>
 
 #ifndef PLAYGROUND_TEMPLATES_H
 #define PLAYGROUND_TEMPLATES_H
