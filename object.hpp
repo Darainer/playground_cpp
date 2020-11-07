@@ -3,6 +3,7 @@
 //
 #ifndef PLAYGROUND_OBJECT_HPP
 #define PLAYGROUND_OBJECT_HPP
+#include <array>
 #endif // PLAYGROUND_OBJECT_HPP
 
 #include "templates.h"
@@ -12,7 +13,7 @@
 
 namespace Object_types {
 
-enum ObjectType { Undefined = 0, Vehicle = 1, Pedestrian = 2, Bicycle = 3 };
+enum class ObjectType { Undefined = 0, Vehicle = 1, Pedestrian = 2, Bicycle = 3 };  //more typesafe than plain enum 
 
 class Point {
 public:
@@ -27,11 +28,13 @@ public:
   Point(const Point &p) // copy constructor
       : position_x{p.position_x}, position_y{p.position_y} {}
 
-  friend bool operator<(Point &lhs, Point &rhs) {
+
+friend bool const operator<(const Point &lhs, const Point &rhs)  {       // friends are allowed in A11-3-1 for comparison operations
     return lhs.distance_to_origin() < rhs.distance_to_origin();
   }
-  friend bool operator<(const Point &lhs, const Point &rhs) {
-    return lhs.distance_to_origin() < rhs.distance_to_origin();
+
+friend bool const operator>(const Point &lhs, const Point &rhs)  {      // friends are allowed in A11-3-1 for comparison operations
+    return lhs.distance_to_origin() > rhs.distance_to_origin();
   }
 
 private:
@@ -142,4 +145,17 @@ private:
     }
   }
 };
+
+const uint16_t NumberofObjectsInList{32};
+class ObjectList{
+  private:
+  std::array<Object ,NumberofObjectsInList> Objects;
+  public:
+  ObjectList(){
+    for(int i{0} ; i<NumberofObjectsInList; ++i){
+      Objects[i] = Object();        // todo assignment as move or in place creation
+    }
+  };
+};
+
 } // namespace Object_types

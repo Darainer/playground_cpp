@@ -30,12 +30,10 @@ Object return_object() {
   return obj2;
 } // myobj goes out of scope when return_object() returns obj2, calls destructor
 
-int main() {
-
+void static_test(){
   // std::array<Object,200>  ObjectList{};
   std::vector<Object> Objectvec;
   // want to initialize with 200 default "safe objects"
-
   Object ret_obj = return_object();
   std::cout << Object::getCount() << std::endl;
   Objectvec.emplace_back(ret_obj);
@@ -48,4 +46,15 @@ int main() {
 
   std::cout << Object::getCount()
             << std::endl; // static variable can be accessed from any object,
+}
+
+void ObjectList_test(){
+  ObjectList mylist{};
+};
+
+
+int main() {
+//static_test();
+ObjectList_test();
+
 }
