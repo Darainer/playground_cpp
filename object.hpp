@@ -105,7 +105,7 @@ public:
     m_ID = getCount();
     objectType = ObjectType::Vehicle;
     calculateObjectWidth();
-  };
+  }
   // Constructor definition
   Object(BoundingBox &BBox, ObjectType &Type) {
     std::cout << "Constructor called." << std::endl;
@@ -146,16 +146,67 @@ private:
   }
 };
 
-const uint16_t NumberofObjectsInList{32};
+
+// memory model of an object list
+// User 1: Creator (tracking module). working on the objects and editing their position on the list
+// operations: changing list order, working on properties, sorting by properties
+// User 2: Consumer (control logic). working with the outputs of the tracking 
+// operations: adding additional properties, sorting and selecting by properties
+
+
+
+// memory_model 1: objects are heap based.  deep copy of list passed to the consumer module at regular interval
+// variant: object list is persistant on the stack and objects on the heap. 
+// objects can still be reordered cheaply, list is initialized at startup and destructor is called to clean up objects 
+// Output of tracking: deep copy once per cycle of the list with objects as a message
+//  avoid deep structures such that the message packing is minimal
+
+const uint16_t NumberofObjectsInList{32};  //all existing lists are the same size
+
+  struct Object_msg{
+    std::array<Object,NumberofObjectsInList> Objects;
+    float timestamp;
+  };
+
+namespace memory_model1{  // objects on heap
 class ObjectList{
+  private:
+  std::array<Object* ,NumberofObjectsInList> Objects;
+  public:
+  ObjectList(){
+    for(int i{0} ; i<NumberofObjectsInList; ++i){
+      Objects[i] = new Object{};        // 
+    }
+  }
+  ObjectList(const ObjectList& copyOfObjectList){  //copy constructor which assumes same list size
+        for(int i{0} ; i<NumberofObjectsInList; ++i){
+          Objects[i] = copyOfObjectList.Objects[i];
+        }
+    } 
+  };
+
+} // namespace memory_model1
+
+// strategy 2:  object list and objects created on the stack and passed by reference to the fusion modules as needed
+// object list and objects created at startup. Allows passing by reference of the list and all object copies
+namespace memory_model2{
+  class ObjectList{
   private:
   std::array<Object ,NumberofObjectsInList> Objects;
   public:
   ObjectList(){
     for(int i{0} ; i<NumberofObjectsInList; ++i){
-      Objects[i] = Object();        // todo assignment as move or in place creation
+      Objects[i] =  Object{};        // 
     }
+  }
+  ObjectList(const ObjectList& copyOfObjectList){  //copy constructor which assumes same list size
+        for(int i{0} ; i<NumberofObjectsInList; ++i){
+          Objects[i] = copyOfObjectList.Objects[i];
+        }
+    } 
   };
-};
+}
+
+
 
 } // namespace Object_types
