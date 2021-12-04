@@ -7,7 +7,10 @@
 #include <iostream>
 #include <vector>
 
-using namespace Object_types;
+
+using Object_types::memory_model1::ObjectList;
+namespace Object_types{
+
 
 int Object::objectCount{0}; // initialize to zero on program startup
 
@@ -53,8 +56,12 @@ void ObjectList_test(){
 };
 
 
-int main() {
-//static_test();
-ObjectList_test();
 
+} // namespace Object_types
+
+
+int main() {
+  //static_test();
+  Object_types::ObjectList_test();
+  return 0;
 }
