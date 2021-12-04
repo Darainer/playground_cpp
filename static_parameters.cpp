@@ -7,7 +7,10 @@
 #include <iostream>
 #include <vector>
 
-using namespace Object_types;
+
+using Object_types::memory_model1::ObjectList;
+namespace Object_types{
+
 
 int Object::objectCount{0}; // initialize to zero on program startup
 
@@ -30,12 +33,10 @@ Object return_object() {
   return obj2;
 } // myobj goes out of scope when return_object() returns obj2, calls destructor
 
-int main() {
-
+void static_test(){
   // std::array<Object,200>  ObjectList{};
   std::vector<Object> Objectvec;
   // want to initialize with 200 default "safe objects"
-
   Object ret_obj = return_object();
   std::cout << Object::getCount() << std::endl;
   Objectvec.emplace_back(ret_obj);
@@ -48,4 +49,19 @@ int main() {
 
   std::cout << Object::getCount()
             << std::endl; // static variable can be accessed from any object,
+}
+
+void ObjectList_test(){
+  ObjectList mylist{};
+};
+
+
+
+} // namespace Object_types
+
+
+int main() {
+  //static_test();
+  Object_types::ObjectList_test();
+  return 0;
 }
