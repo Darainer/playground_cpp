@@ -7,15 +7,16 @@
 #ifndef PLAYGROUND_RAII_H
 #define PLAYGROUND_RAII_H
 
-#endif // PLAYGROUND_RAII_H
-
 namespace stringmaker {
 
 class String {
   std::basic_string<char> str;
 
 public:
-  explicit String(std::string n = "im NULL") : str{n} {}
+  explicit String(std::string n = "im NULL")
+      : str{n} {} // Use explicit because we want to prevent any invocation of
+                  // constructor with implicitly convertable types which would cause a
+                  // compiler error see AUTOSAR A12-1-4
   // String(){}
   // String(char* s){
   //   str = s;}
@@ -38,3 +39,5 @@ public:
   }
 };
 } // namespace stringmaker
+
+#endif // PLAYGROUND_RAII_H
